@@ -1,130 +1,140 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'global_data.dart';
 
-class SummarizePage extends StatelessWidget {
-  const SummarizePage({super.key});
+class SummarizePage extends StatefulWidget {
+  final double calories;
+  final int totalSeconds;
+  final int streakDays;
+
+  const SummarizePage({
+    super.key,
+    required this.calories,
+    required this.totalSeconds,
+    required this.streakDays,
+  });
+
+  @override
+  State<SummarizePage> createState() => _SummarizePageState();
+}
+
+class _SummarizePageState extends State<SummarizePage> {
+  
+  // ฟังก์ชันแปลงวินาทีเป็น นาที:วินาที
+  String _formatTime(int seconds) {
+    if (seconds < 60) return '$seconds sec';
+    int mins = seconds ~/ 60;
+    int secs = seconds % 60;
+    return secs == 0 ? '$mins min' : '$mins min $secs sec';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          // ใช้ Gradient 3 สีเหมือนหน้าหลักเพื่อให้ดูมีมิติและผ่อนคลาย
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFE3F2FD), Colors.white, Color(0xFFBBDEFB)],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // หัวข้อใช้ฟอนต์หนาและสีน้ำเงินเข้มตามธีมใหม่
-                  const Text(
-                    'You’ve done !',
-                    style: TextStyle(
-                      fontSize: 38,
-                      fontWeight: FontWeight.w900,
-                      color: Color(0xFF1976D2),
-                      letterSpacing: -1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Amazing job on your workout!',
-                    style: TextStyle(color: Colors.black45, fontSize: 16),
-                  ),
-                  const SizedBox(height: 40),
-
-                  // รูปภาพตัวการ์ตูน
-                  Image.asset(
-                    'photo/summerize.png',
-                    width: 240,
-                    height: 240,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 50),
-
-                  // การ์ด Streak แบบ Modern Glassmorphism
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.7), // โปร่งแสง
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.white, width: 1.5), // เส้นขอบขาว
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(0.1),
-                          blurRadius: 25,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Streak days',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        const Text(
-                          '365 days',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF1976D2),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Text('🔥', style: TextStyle(fontSize: 24)),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 60),
-
-                  // ปุ่ม Continue สไตล์ Modern Blue
-                  SizedBox(
-                    width: 200,
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1976D2), // สีน้ำเงินเข้มเข้าธีม
-                        foregroundColor: Colors.white,
-                        elevation: 8,
-                        shadowColor: Colors.blue.withOpacity(0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 10),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black54),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'You’ve done !',
+                        style: GoogleFonts.nunito(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
                         ),
                       ),
-                      child: const Row(
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Amazing job on your workout!',
+                        style: TextStyle(color: Colors.black45, fontSize: 16),
+                      ),
+                      const SizedBox(height: 40),
+                      
+                      // ส่วนแสดงสถิติที่แก้ไขใหม่
+                      Container(
+                        padding: const EdgeInsets.all(25),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FBFF),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildStat('Calories', widget.calories.toStringAsFixed(1), 'kcal', Colors.orange),
+                            _buildStat('Duration', _formatTime(widget.totalSeconds), '', Colors.blue),
+                          ],
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      // แสดง Streak
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Continue',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            '${widget.streakDays} Day Streak',
+                            style: GoogleFonts.nunito(fontSize: 24, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(width: 10),
-                          Icon(Icons.arrow_forward_rounded),
+                          const SizedBox(width: 10),
+                          const Text('🔥', style: TextStyle(fontSize: 30)),
                         ],
                       ),
-                    ),
+
+                      const SizedBox(height: 50),
+                      SizedBox(
+                        width: 200,
+                        height: 55,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // ล้างค่า Global ก่อนกลับหน้าแรก
+                            GlobalData.totalCalories = 0.0;
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1976D2),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                          ),
+                          child: const Text('Back to Home', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
+    );
+  }
+
+  // Widget ลูกสำหรับสร้างช่องแสดงตัวเลข
+  Widget _buildStat(String label, String value, String unit, Color color) {
+    return Column(
+      children: [
+        Text(label, style: const TextStyle(color: Colors.black45, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: color)),
+        if (unit.isNotEmpty) Text(unit, style: TextStyle(color: color, fontSize: 14)),
+      ],
     );
   }
 }
