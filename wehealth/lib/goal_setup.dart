@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// --- ส่วนที่ 1: Import หน้าปลายทาง ---
+import 'package:wehealth/homepage_loseweight.dart';
+import 'package:wehealth/homepage_buildstrenth.dart';
+import 'package:wehealth/homepage_reducestress.dart';
+import 'package:wehealth/homepage_stayhealthy.dart';
+
+// เพิ่มการ Import หน้า Login (ตรวจสอบชื่อไฟล์และ Path ให้ตรงกับโปรเจกต์ของคุณ)
+import 'package:wehealth/login_page.dart'; 
+
 class GoalSetupPage extends StatelessWidget {
   const GoalSetupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ใช้พื้นหลัง Gradient ให้เข้ากับหน้า Login และหน้าอื่นๆ
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -16,8 +24,8 @@ class GoalSetupPage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE3F2FD), // สีฟ้าอ่อนด้านบน
-              Colors.white,       // ไล่ลงมาเป็นสีขาว
+              Color(0xFFE3F2FD),
+              Colors.white,
             ],
           ),
         ),
@@ -27,14 +35,12 @@ class GoalSetupPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 60),
-                
-                // หัวข้อคำถาม ใช้ GoogleFonts เพื่อความทันสมัย
                 Text(
                   'What is your goal?',
                   style: GoogleFonts.nunito(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1976D2), // ใช้สีน้ำเงินธีมหลัก
+                    color: const Color(0xFF1976D2),
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -46,10 +52,9 @@ class GoalSetupPage extends StatelessWidget {
                     color: Colors.black54,
                   ),
                 ),
-                
                 const SizedBox(height: 40),
 
-                // ส่วนการ์ดเป้าหมาย 4 อย่าง
+                // ส่วนการ์ดเป้าหมาย
                 Expanded(
                   child: GridView.count(
                     crossAxisCount: 2,
@@ -65,16 +70,23 @@ class GoalSetupPage extends StatelessWidget {
                   ),
                 ),
 
-                // ปุ่ม Back (ปรับให้โค้งมนและมีเงาบางๆ)
+                // ปุ่ม Back ที่แก้ไขแล้ว
                 Padding(
                   padding: const EdgeInsets.only(bottom: 40.0),
                   child: SizedBox(
                     width: 180,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        // แก้ไข: ใช้ pushAndRemoveUntil เพื่อล้างหน้าเก่าและกลับไปหน้า Login ชัวร์ๆ
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                          (route) => false, // ลบทุกหน้าใน Stack ออกเพื่อให้หน้า Login เป็นหน้าแรกสุด
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // เปลี่ยนเป็นสีขาวเพื่อให้ดูเด่นบนพื้นฟ้า
+                        backgroundColor: Colors.white,
                         foregroundColor: const Color(0xFF1976D2),
                         elevation: 4,
                         shadowColor: Colors.black12,
@@ -108,12 +120,12 @@ class GoalSetupPage extends StatelessWidget {
     );
   }
 
-  // ฟังก์ชันสร้างการ์ดเป้าหมาย (ปรับ Theme ใหม่)
+  // --- ส่วนที่ 2: ฟังก์ชันสร้างการ์ดพร้อมระบบ Navigation ---
   Widget _buildGoalCard(BuildContext context, String title, String imagePath) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(25), // มนมากขึ้น
+        borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF1976D2).withOpacity(0.08),
@@ -127,13 +139,27 @@ class GoalSetupPage extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            // Logic เมื่อเลือกเป้าหมาย
+            Widget destination;
+            // แก้ไขชื่อคลาสให้ตรงกับหน้าปลายทาง (เช็คเรื่องตัวพิมพ์เล็ก/ใหญ่ด้วย)
+            if (title == 'Lose weight') {
+              destination = const HomepageLoseweight(); 
+            } else if (title == 'Build strength') {
+              destination = const HomepageBuildstrength();
+            } else if (title == 'Reduce stress') {
+              destination = const HomepageReducestress();
+            } else {
+              destination = const HomepageStayhealthy();
+            }
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => destination),
+            );
           },
           borderRadius: BorderRadius.circular(25),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ตกแต่งพื้นหลังรูปภาพเล็กน้อย
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
