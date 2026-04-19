@@ -1,17 +1,22 @@
 name: wehealth
 description: WEhealth Flutter App
-
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
   sdk: '>=2.17.0 <4.0.0'
 
 dependencies:
+  cloud_firestore: any
+  firebase_core: any
+  firebase_auth: any
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
+  # เพิ่ม 2 ตัวนี้เพื่อระบบนับก้าวและขอสิทธิ์
+  pedometer: ^4.0.0
+  permission_handler: ^11.3.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
